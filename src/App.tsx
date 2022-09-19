@@ -3,6 +3,7 @@ import './App.css'
 
 type Todo = {
   value: string;
+  readonly id: number;
 }
 
 export const App = () => {
@@ -14,7 +15,10 @@ export const App = () => {
   }
 
   // toods ステートを更新
-  const handleOnSubmit = () => {
+  const handleOnSubmit = (
+    e: React.FormEvent<HTMLFormElement | HTMLInputElement>
+  ) => {
+    e.preventDefault();
     if (!text) {
       // テキスト欄への入力が無い
       return ;
@@ -22,6 +26,7 @@ export const App = () => {
 
     const newTodo: Todo = {
       value: text,
+      id: new Date().getTime(),
     }
 
     // スプレッド構文を用いて todos ステートのコピーへ newTodo を追加する
@@ -32,7 +37,7 @@ export const App = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => handleOnSubmit()}>
+      <form onSubmit={(e) => handleOnSubmit(e)}>
         <input
           type="text"
           value={text}
@@ -44,6 +49,11 @@ export const App = () => {
           onSubmit={handleOnSubmit}
         />
       </form>
+      <ul>
+        {todos.map((todo) => {
+          return <li key={todo.id}>{todo.value}</li>;
+        })}
+      </ul>
     </div>
   )
 }
