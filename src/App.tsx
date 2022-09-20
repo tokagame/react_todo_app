@@ -4,6 +4,7 @@ import './App.css'
 type Todo = {
   value: string;
   readonly id: number;
+  checked: boolean;
 }
 
 export const App = () => {
@@ -27,12 +28,41 @@ export const App = () => {
     const newTodo: Todo = {
       value: text,
       id: new Date().getTime(),
+      checked: false,
     }
 
     // スプレッド構文を用いて todos ステートのコピーへ newTodo を追加する
     setTodos([newTodo, ...todos]);
     // フォーム欄をクリア
     setText('');
+  }
+
+  const handleOnEdit = (id: number, value: string) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.id === id) {
+        todo.value = value;
+      }
+
+      return todo;
+    })
+
+    setTodos(newTodos);
+  }
+
+  const handleOnCheck = (id: number, checked: boolean) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.id === id) {
+        todo.checked = !checked;
+      }
+
+      return todo
+    })
+
+    setTodos(newTodos)
   }
 
   return (
@@ -51,7 +81,21 @@ export const App = () => {
       </form>
       <ul>
         {todos.map((todo) => {
-          return <li key={todo.id}>{todo.value}</li>;
+          return (
+            <li key={todo.id}>
+              <input
+                type="checkbox"
+                disabled={todo.checked}
+                checked={todo.checked}
+                onChange={() => handleOnCheck(todo.id, todo.checked)}
+              />
+              <input
+                type="text"
+                value={todo.value}
+                onChange={(e) => handleOnEdit(todo.id, e.target.value)}
+              />
+            </li>
+          )
         })}
       </ul>
     </div>
