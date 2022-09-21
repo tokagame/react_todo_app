@@ -7,10 +7,12 @@ type Todo = {
   checked: boolean;
   removed: boolean;
 }
+type Filter = 'all' | 'checked' | 'unchecked' | 'removed';
 
 export const App = () => {
   const [text, setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<Filter>('all');
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -81,22 +83,60 @@ export const App = () => {
     setTodos(newTodos);
   }
 
+  const filterTodos = todos.filter((todo) => {
+    switch (filter) {
+      case 'all': // 削除されていないタスク
+        return !todo.removed;
+
+      case 'checked': // 完了済み & 削除されていないタスク
+        return todo.checked && !todo.removed;
+
+      case 'unchecked': // 未完了 & 削除されていないタス
+        return !todo.checked && !todo.removed;
+
+      case 'removed': // 削除済みのタスク
+        return todo.removed;
+
+      default:
+        return todo;
+
+    }
+  })
+
   return (
     <div>
-      <form onSubmit={(e) => handleOnSubmit(e)}>
+      <select
+        defaultValue="all"
+        onChange={(e) => setFilter(e.target.value as Filter)}
+      >
+        <option value="all">すべてのタスク</option>
+        <option value="checked">完了したタスク</option>
+        <option value="unchecked">現在のタスク</option>
+        <option value="aremoved">ごみ箱</option>
+      </select>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleOnSubmit(e)
+        }}
+      >
         <input
           type="text"
           value={text}
+          disabled={filter === 'checked' || filter === 'removed'}
           onChange={(e) => handleOnChange(e)}
         />
         <input
           type="submit"
           value="追加"
-          onSubmit={handleOnSubmit}
+          disabled={filter === 'checked' || filter === 'removed'}
+          onSubmit={(e) => handleOnSubmit(e)}
         />
       </form>
+
       <ul>
-        {todos.map((todo) => {
+        {filterTodos.map((todo) => {
           return (
             <li key={todo.id}>
               <input
