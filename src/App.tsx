@@ -19,10 +19,7 @@ export const App = () => {
   }
 
   // toods ステートを更新
-  const handleOnSubmit = (
-    e: React.FormEvent<HTMLFormElement | HTMLInputElement>
-  ) => {
-    e.preventDefault();
+  const handleOnSubmit = () => {
     if (!text) {
       // テキスト欄への入力が無い
       return ;
@@ -132,7 +129,7 @@ export const App = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault()
-              handleOnSubmit(e)
+              handleOnSubmit()
             }}
           >
             <input
@@ -143,7 +140,7 @@ export const App = () => {
             <input
               type="submit"
               value="追加"
-              onSubmit={(e) => handleOnSubmit(e)}
+              onSubmit={handleOnSubmit}
             />
           </form>
         )
@@ -155,13 +152,13 @@ export const App = () => {
             <li key={todo.id}>
               <input
                 type="checkbox"
-                disabled={todo.checked}
+                disabled={todo.removed}
                 checked={todo.checked}
                 onChange={() => handleOnCheck(todo.id, todo.checked)}
               />
               <input
                 type="text"
-                disabled={todo.removed}
+                disabled={todo.checked || todo.removed}
                 value={todo.value}
                 onChange={(e) => handleOnEdit(todo.id, e.target.value)}
               />
