@@ -1,9 +1,31 @@
 import { useState } from 'react'
 import './App.css'
+
+import GlobalStyles from '@mui/material/GlobalStyles'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { indigo, pink } from '@mui/material/colors'
+
 import { FormDialog } from './FormDialog'
 import { TodoItem } from './TodoItem'
+import { ToolBar } from './ToolBar';
 
-export const App = () => {
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: indigo[500],
+      light: '#757de8',
+      dark: '#002984',
+    },
+    secondary: {
+      main: pink[500],
+      light: '#ff6090',
+      dark: '#b0003a',
+    },
+  }
+})
+
+export const App = (): JSX.Element => {
   const [text, setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
@@ -80,7 +102,10 @@ export const App = () => {
   }
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }}></GlobalStyles>
+      <ToolBar filter={filter}></ToolBar>
+
       <FormDialog
         text={text}
         onChange={handleOnChange}
@@ -94,6 +119,6 @@ export const App = () => {
         onCheck={handleOnCheck}
         onRemove={handleOnRemove}
       />
-    </div>
+    </ThemeProvider>
   )
 }
