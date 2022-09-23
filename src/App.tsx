@@ -8,6 +8,7 @@ import { indigo, pink } from '@mui/material/colors'
 import { FormDialog } from './FormDialog'
 import { TodoItem } from './TodoItem'
 import { ToolBar } from './ToolBar';
+import { SideBar } from './SideBar';
 
 
 const theme = createTheme({
@@ -29,6 +30,7 @@ export const App = (): JSX.Element => {
   const [text, setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -101,10 +103,25 @@ export const App = (): JSX.Element => {
     setTodos(newTodos);
   }
 
+  const handleOnSort = (filter: Filter) => {
+    setFilter(filter);
+  }
+
+  const onToggleDrawer = () => setDrawerOpen(!drawerOpen);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }}></GlobalStyles>
-      <ToolBar filter={filter}></ToolBar>
+      <ToolBar
+        filter={filter}
+        onToggleDrawer={onToggleDrawer}
+      />
+
+      <SideBar
+        drawerOpen={drawerOpen}
+        onSort={handleOnSort}
+        onToggleDrawer={onToggleDrawer}
+      />
 
       <FormDialog
         text={text}
