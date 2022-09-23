@@ -9,7 +9,7 @@ import { FormDialog } from './FormDialog'
 import { TodoItem } from './TodoItem'
 import { ToolBar } from './ToolBar';
 import { SideBar } from './SideBar';
-
+import { QR } from './QR';
 
 const theme = createTheme({
   palette: {
@@ -31,6 +31,7 @@ export const App = (): JSX.Element => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -109,9 +110,11 @@ export const App = (): JSX.Element => {
 
   const onToggleDrawer = () => setDrawerOpen(!drawerOpen);
 
+  const onToggleQR = () => setQrOpen(!qrOpen);
+
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }}></GlobalStyles>
+      <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} />
       <ToolBar
         filter={filter}
         onToggleDrawer={onToggleDrawer}
@@ -121,6 +124,12 @@ export const App = (): JSX.Element => {
         drawerOpen={drawerOpen}
         onSort={handleOnSort}
         onToggleDrawer={onToggleDrawer}
+        onToggleQR={onToggleQR}
+      />
+
+      <QR
+        open={qrOpen}
+        onClose={onToggleQR}
       />
 
       <FormDialog

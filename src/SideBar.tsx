@@ -6,6 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SubjectIcon from '@mui/icons-material/Subject';
 import CreateIcon from '@mui/icons-material/CreateRounded';
@@ -22,6 +23,7 @@ type Props = {
   drawerOpen: boolean;
   onToggleDrawer: () => void;
   onSort: (filter: Filter) => void;
+  onToggleQR: () => void;
 }
 
 const DrawerList = styled('div')(() => ({
@@ -90,7 +92,7 @@ export const SideBar = (props: Props) => {
             alia-label="incomplete"
           >
             <ListItemIcon>
-              <SubjectIcon />
+              <IconUnChecked />
             </ListItemIcon>
             <ListItemText secondary="現在のタスク" />
           </ListItem>
@@ -101,7 +103,7 @@ export const SideBar = (props: Props) => {
             alia-label="checked"
           >
             <ListItemIcon>
-              <SubjectIcon />
+              <IconCompleted />
             </ListItemIcon>
             <ListItemText secondary="完了したのタスク" />
           </ListItem>
@@ -112,11 +114,24 @@ export const SideBar = (props: Props) => {
             alia-label="removed"
           >
             <ListItemIcon>
-              <SubjectIcon />
+              <DeleteIcon />
             </ListItemIcon>
             <ListItemText secondary="ごみ箱" />
           </ListItem>
+
           <Divider />
+
+          <ListItem
+            button
+            onClick={props.onToggleQR}
+            alia-label="share"
+          >
+            <ListItemIcon>
+              <DeleteIcon />
+            </ListItemIcon>
+            <ListItemText secondary="このアプリを共有" />
+          </ListItem>
+
         </List>
       </DrawerList>
     </Drawer>
