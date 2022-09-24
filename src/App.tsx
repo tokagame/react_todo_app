@@ -10,6 +10,8 @@ import { TodoItem } from './TodoItem'
 import { ToolBar } from './ToolBar';
 import { SideBar } from './SideBar';
 import { QR } from './QR';
+import { AlertDialog } from './AlertDialog';
+import { ActionButton } from './ActionButton';
 
 const theme = createTheme({
   palette: {
@@ -30,9 +32,11 @@ export const App = (): JSX.Element => {
   const [text, setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const onToggleQR = () => setQrOpen(!qrOpen);
   const onToggleDrawer = () => setDrawerOpen(!drawerOpen);
@@ -40,6 +44,7 @@ export const App = (): JSX.Element => {
     setDialogOpen(!dialogOpen);
     setText('');
   }
+  const onToggleAlert = () => setAlertOpen(!alertOpen);
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -149,12 +154,27 @@ export const App = (): JSX.Element => {
         onToggleDialog={onToggleDialog}
       />
 
+      <AlertDialog
+        alertOpen={alertOpen}
+        onEmpty={handleOnEmpty}
+        onToggleAlert={onToggleAlert}
+      />
+
       <TodoItem
         todos={todos}
         filter={filter}
         onEdit={handleOnEdit}
         onCheck={handleOnCheck}
         onRemove={handleOnRemove}
+      />
+
+      <ActionButton
+        todos={todos}
+        filter={filter}
+        alertOpen={alertOpen}
+        dialogOpen={dialogOpen}
+        onToggleAlert={onToggleAlert}
+        onToggleDialog={onToggleDialog}
       />
     </ThemeProvider>
   )
