@@ -32,8 +32,18 @@ export const App = (): JSX.Element => {
   const [filter, setFilter] = useState<Filter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onToggleQR = () => setQrOpen(!qrOpen);
+  const onToggleDrawer = () => setDrawerOpen(!drawerOpen);
+  const onToggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+    setText('');
+  }
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setText(e.target.value);
   }
 
@@ -41,6 +51,7 @@ export const App = (): JSX.Element => {
   const handleOnSubmit = () => {
     if (!text) {
       // テキスト欄への入力が無い
+      setDialogOpen(false);
       return ;
     }
 
@@ -55,6 +66,7 @@ export const App = (): JSX.Element => {
     setTodos([newTodo, ...todos]);
     // フォーム欄をクリア
     setText('');
+    setDialogOpen(false);
   }
 
   const handleOnEdit = (id: number, value: string) => {
@@ -108,9 +120,6 @@ export const App = (): JSX.Element => {
     setFilter(filter);
   }
 
-  const onToggleDrawer = () => setDrawerOpen(!drawerOpen);
-
-  const onToggleQR = () => setQrOpen(!qrOpen);
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,6 +145,8 @@ export const App = (): JSX.Element => {
         text={text}
         onChange={handleOnChange}
         onSubmit={handleOnSubmit}
+        dialogOpen={dialogOpen}
+        onToggleDialog={onToggleDialog}
       />
 
       <TodoItem
