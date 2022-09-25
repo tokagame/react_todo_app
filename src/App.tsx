@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
+
+import localforage from 'localforage'
 
 import GlobalStyles from '@mui/material/GlobalStyles'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -12,6 +14,8 @@ import { SideBar } from './SideBar';
 import { QR } from './QR';
 import { AlertDialog } from './AlertDialog';
 import { ActionButton } from './ActionButton';
+
+import { isTodos } from './lib/isTodos'
 
 const theme = createTheme({
   palette: {
@@ -125,6 +129,26 @@ export const App = (): JSX.Element => {
     setFilter(filter);
   }
 
+  /**
+   * IndexedDB から保存したストアオブジェクトを取得
+   * (マウント時に実行)
+   */
+  useEffect(() => {
+    localforage
+      .getItem('todo-20200925')
+      .then((values) => isTodos(values) && setTodos(values))
+      .catch((err) => console.error(err))
+  }, [])
+
+    /**
+   * IndexedDB にデータを保存
+   * (更新時に実行)
+   */
+  useEffect(() => {
+    localforage
+      .setItem('todo-20200925', todos)
+      .catch((err) => console.error(err))
+  }, [todos])
 
   return (
     <ThemeProvider theme={theme}>
