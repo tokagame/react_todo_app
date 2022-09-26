@@ -21,7 +21,7 @@ export const QR = (props: Props) => {
       onClick={props.onClose}
     >
       <QRCode
-        value="https://sprout2000.github.io/todo"
+        value="https://tokagame.github.io/react_todo_app/"
       />
     </TodoBackdrop>
   )

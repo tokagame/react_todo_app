@@ -146,7 +146,7 @@ export const App = (): JSX.Element => {
    */
   useEffect(() => {
     localforage
-      .setItem('todo-20200925', todos)
+      .setItem('react-todo-app', todos)
       .catch((err) => console.error(err))
   }, [todos])
 
